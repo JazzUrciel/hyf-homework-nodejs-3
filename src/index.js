@@ -3,12 +3,7 @@ const app = express();//creates an instance of the express constructor, which we
 const port = 3000;
 
 const bd = [];
-// app.use(bodyParser.json());
 
-// const Developer =[
-//     {name:'Mark'},
-//     {name:'Jill'}
-// ]
 
 
 app.get('/', function(req,res){
@@ -27,41 +22,25 @@ app.post('/user',(req,res)=>{
 });
 
 app.get('/user/:id', (req,res)=>{
-    console.log(req.params.id)
-    res.json({id:Number(req.params.id)});
+    const index = bd.indexOf(Number(req.params.id));
+    console.log(index)
+    if (index < 0){
+        console.log("holi");
+        return res.sendStatus(204);
+        
+    }
+    return res.json({id:Number(req.params.id)});
+    
 });
 
-// app.post('/users',function(req,res){
-//     const username=req.body.username;
-//     const password=req.body.password;
-
-//     // This should come from the database
-//     const Developer="billyTheKid";
-//     const Developer="superSecret";
-
-//     if (username===Developer && password===Developer){
-//         // In practice, use JSON web token sign method here to make an encrypted token
-//          res.json({
-//               success: true,
-//               message: 'password and username match!',
-//               token: 'encrypted token goes here'
-//          })
-//     } else {
-//          res.json({
-//               success: false,
-//               message: 'password and username do not match'
-//          })
-//     }
-// });
-
-// app.get('/users/:id',function(req,res){
-// 	console.log(req.params.id)
-// 	res.json({
-// 		success: true,
-// 		message: 'got one user',
-// 		user: req.params.id
-// 	})
-// })
+app.delete('/user/:id', (req,res)=>{
+    const index = bd.indexOf(Number(req.params.id));
+    if (index < 0){
+        return res.sendStatus(204);
+    }
+    let deleted = bd.splice(index, 1);
+    return res.status(202).json({id:deleted});
+});
 
 app.listen(port, (err) => {
     if (err) {
